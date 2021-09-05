@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <TableRow
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="409dp"
+        android:layout_height="729dp">
+
+    <TextView
+        android:id="@+id/tvCodigo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="TextView"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tvMarca"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="TextView"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tvModelo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="TextView"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tvEntrada"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="TextView"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/tvSalida"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight=".25"
+        android:text="TextView"
+        android:textSize="19sp" />
+    </TableRow>
