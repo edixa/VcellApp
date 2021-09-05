@@ -10,7 +10,7 @@ class SqlDB(
     version: Int
 ) : SQLiteOpenHelper(context, name, factory, version) {
     override fun onCreate(db: SQLiteDatabase?) {
-      db?.execSQL("create table inventario (codigo int primary key, marca text, modelo text, cantidad int, entrada int, salida int)")
+      db?.execSQL("create table inventario (codigo int primary key, marca text, modelo text, entrada int, salida int)")
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {

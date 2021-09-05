@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="232dp"
         android:layout_marginEnd="32dp"
+        android:onClick="buscar"
         app:layout_constraintEnd_toStartOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/edtSalida"
         app:srcCompat="@android:drawable/btn_star" />
@@ -53,17 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/edtMarca" />
 
     <EditText
-        android:id="@+id/edtCantidad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Cantidad"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtModelo" />
-
-    <EditText
         android:id="@+id/edtEntrada"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,7 +62,7 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtCantidad" />
+        app:layout_constraintTop_toBottomOf="@+id/edtModelo" />
 
     <EditText
         android:id="@+id/edtSalida"
