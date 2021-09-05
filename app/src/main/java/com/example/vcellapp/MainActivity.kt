@@ -77,4 +77,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    fun eliminar(view: View){
+        val con=SqlDB(this,"Tienda",null, 1)
+        val baseDatos=con.writableDatabase
+        val codigo=edtCodigo?.text.toString()
+        if(codigo.isEmpty()==false){
+            val cant=baseDatos.delete("inventario", "codigo='"+codigo+"'", null)
+            if(cant>0){
+                Toast.makeText(this, "El celular fue eliminado",Toast.LENGTH_LONG).show()
+
+            }
+            else{
+                Toast.makeText( this"El celular no se encontro", Toast.LENGTH_SHORT).show()
+            }
+            edtCodigo?.setText("")
+            edtMarca?.setText("")
+            edtModelo?.setText("")
+            edtEntrada?.setText("")
+            edtSalida?.setText("")
+        }
+        else{
+            Toast.makeText(this,"El campo codigo debe tener texto", Toast.LENGTH_LONG).show()
+        }
+    }
 }
