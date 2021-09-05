@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
             }
             else{
-                Toast.makeText( this"El celular no se encontro", Toast.LENGTH_SHORT).show()
+                Toast.makeText( this,"El celular no se encontro", Toast.LENGTH_SHORT).show()
             }
             edtCodigo?.setText("")
             edtMarca?.setText("")
@@ -98,6 +98,34 @@ class MainActivity : AppCompatActivity() {
         }
         else{
             Toast.makeText(this,"El campo codigo debe tener texto", Toast.LENGTH_LONG).show()
+        }
+    }
+    fun editar(view: View){
+        val con=SqlDB(this,"Tienda", null,1)
+        val baseDatos=con.writableDatabase
+
+        val codigo=edtCodigo?.text.toString()
+        val marca=edtMarca?.text.toString()
+        val modelo=edtModelo?.text.toString()
+        val entrada=edtEntrada?.text.toString()
+        val salida=edtSalida?.text.toString()
+
+        if(!codigo.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !entrada.isEmpty() && !salida.isEmpty()){
+            var inventario=ContentValues()
+            inventario.put("codigo", codigo)
+            inventario.put("marca", marca)
+            inventario.put("modelo", modelo)
+            inventario.put("entrada", entrada)
+            inventario.put("salida", salida)
+
+            val cant=baseDatos.update("inventario", inventario, "codigo='$codigo'", null)
+
+            if(cant>0){
+                Toast.makeText(this,"El registro se ha editado correctamente", Toast.LENGTH_LONG).show()
+            }
+            else{
+                Toast.makeText(this, "El registro no fue encontrado", Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
