@@ -13,7 +13,7 @@ class SqlDB(
       db?.execSQL("create table inventario (codigo int primary key, marca text, modelo text, entrada int, salida int)")
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("Not yet implemented")
     }
 }

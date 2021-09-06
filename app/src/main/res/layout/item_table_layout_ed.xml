@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <TableRow
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="409dp"
-        android:layout_height="729dp">
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="409dp"
+    android:layout_height="729dp"
+    android:onClick="clickRegistro">
 
     <TextView
         android:id="@+id/tvCodigo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight=".25"
+        android:onClick="clickRegistro"
         android:text="TextView"
         android:textSize="19sp" />
 
@@ -45,4 +46,4 @@
         android:layout_weight=".25"
         android:text="TextView"
         android:textSize="19sp" />
-    </TableRow>
+</TableRow>

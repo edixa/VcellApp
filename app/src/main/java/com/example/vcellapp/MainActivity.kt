@@ -1,14 +1,12 @@
 package com.example.vcellapp
 
 import android.content.ContentValues
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.TableLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 
 class MainActivity : AppCompatActivity() {
     var edtCodigo:EditText?=null
@@ -16,7 +14,9 @@ class MainActivity : AppCompatActivity() {
     var edtModelo:EditText?=null
     var edtEntrada:EditText?=null
     var edtSalida:EditText?=null
+    var edtBuscarPor:EditText?=null
     var tlCelulares:TableLayout?=null
+    var spBuscarPor:Spinner?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +27,20 @@ class MainActivity : AppCompatActivity() {
         edtModelo=findViewById(R.id.edtModelo)
         edtEntrada=findViewById(R.id.edtEntrada)
         edtSalida=findViewById(R.id.edtSalida)
+        edtBuscarPor=findViewById(R.id.edtBuscarPor)
         tlCelulares=findViewById(R.id.tlCelulares)
-        llenarTabla()
+
+        spBuscarPor=findViewById(R.id.spBuscarPor)
+
+        var listaCampos= arrayOf("Selecione el campo a buscar", "codigo", "marca", "modelo", "entrada", "salida")
+        var adaptador:ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item,listaCampos)
+        spBuscarPor?.adapter=adaptador
     }
+
+
+
+
+
     fun insertar(view:View) {
         var con = SqlDB(this, "Tienda", null, 1)
         var baseDatos = con.writableDatabase
@@ -58,30 +69,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Los campos deden ser llenados", Toast.LENGTH_LONG).show()
         }
         baseDatos.close()
-    }
-    fun buscar(view:View){
-        val con=SqlDB(this, "Tienda", null, 1)
-        val baseDatos=con.writableDatabase
-        val codigo=edtCodigo?.text.toString()
-        if(codigo.isEmpty()==false){
-            val fila=baseDatos.rawQuery("select marca, modelo, entrada, salida from inventario where codigo='$codigo'", null)
-            if(fila.moveToFirst()==true){
-                edtMarca?.setText(fila.getString(0))
-                edtModelo?.setText(fila.getString(1))
-                edtEntrada?.setText(fila.getString(2))
-                edtSalida?.setText(fila.getString(3))
-                baseDatos.close()
-
-            }
-            else{
-                edtMarca?.setText("")
-                edtModelo?.setText("")
-                edtEntrada?.setText("")
-                edtSalida?.setText("")
-                Toast.makeText(this, "No se encontraron registros", Toast.LENGTH_LONG).show()
-
-            }
-        }
+        llenarTabla()
     }
     fun eliminar(view: View){
         val con=SqlDB(this,"Tienda",null, 1)
@@ -90,11 +78,11 @@ class MainActivity : AppCompatActivity() {
         if(codigo.isEmpty()==false){
             val cant=baseDatos.delete("inventario", "codigo='"+codigo+"'", null)
             if(cant>0){
-                Toast.makeText(this, "El celular fue eliminado",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "El registro fue eliminado",Toast.LENGTH_LONG).show()
 
             }
             else{
-                Toast.makeText( this,"El celular no se encontro", Toast.LENGTH_SHORT).show()
+                Toast.makeText( this,"El egistro no fue encontrado", Toast.LENGTH_SHORT).show()
             }
             edtCodigo?.setText("")
             edtMarca?.setText("")
@@ -133,12 +121,41 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "El registro no fue encontrado", Toast.LENGTH_LONG).show()
             }
         }
+        llenarTabla()
     }
-    fun llenarTabla(){
+    fun llenarTabla() {
         tlCelulares?.removeAllViews()
-        val con=SqlDB(this,"Tienda", null, 1)
-        val baseDatos=con.writableDatabase
-        val fila=baseDatos.rawQuery("select codigo, marca, modelo, entrada, salida from inventario", null)
+        val con = SqlDB(this, "Tienda", null, 1)
+        val baseDatos = con.writableDatabase
+        val BuscarPor = edtBuscarPor?.text.toString()
+        val listaBuscarPor = spBuscarPor?.selectedItem.toString()
+        var sql = ""
+        if (!BuscarPor.isEmpty()) {
+            if (listaBuscarPor == "Codigo"){
+                sql = "select codigo, marca, modelo, entrada, salida from inventario where codigo='$BuscarPor'"
+
+        }else if (listaBuscarPor=="Marca"){
+            sql="select codigo,marca,modelo,entrada,salida from inventario where marca like'%$BuscarPor%'"
+
+        }else if (listaBuscarPor=="Modelo"){
+                sql="select codigo,marca,modelo,entrada,salida from inventario where modelo like='%$BuscarPor$'"
+
+        }else if (listaBuscarPor=="Entrada"){
+                sql="select codigo,marca,modelo,entrada,salida from inventario where entrada ='$BuscarPor'"
+
+        }else if (listaBuscarPor=="Salida"){
+                sql="select codigo, marca,modelo,entrada,salida from inventario where salida ='$BuscarPor'"
+
+        }else{
+            sql="select codigo,marca,modelo,entrada,salida from inventario"
+        }
+    }
+        else{
+            sql="select codigo,marca,modelo,entrada,salida from inventario"
+
+        }
+
+        val fila=baseDatos.rawQuery(sql,null)
         fila.moveToFirst()
         do{
             val registro=LayoutInflater.from(this).inflate(R.layout.item_table_layout_ed, null, false)
@@ -147,6 +164,7 @@ class MainActivity : AppCompatActivity() {
             val tvModelo=registro.findViewById<View>(R.id.tvModelo) as TextView
             val tvEntrada=registro.findViewById<View>(R.id.tvEntrada) as TextView
             val tvSalida=registro.findViewById<View>(R.id.tvSalida) as TextView
+
             tvCodigo.setText(fila.getString(0))
             tvMarca.setText(fila.getString(1))
             tvModelo.setText(fila.getString(2))
@@ -155,5 +173,44 @@ class MainActivity : AppCompatActivity() {
             tlCelulares?.addView(registro)
 
         }while (fila.moveToNext())
+    }
+    fun clickRegistro(view: View){
+        resetColorRegistros()
+        view.setBackgroundColor(Color.GRAY)
+        val registro=view as TableRow
+        val controlCodigo=registro.getChildAt(0) as TextView
+        val codigo=controlCodigo.text.toString()
+        val con=SqlDB(this, "Tienda", null, 1)
+        val baseDatos=con.writableDatabase
+        if(!codigo.isEmpty()){
+            val fila=baseDatos.rawQuery("select codigo,marca, modelo, entrada, salida from inventario where codigo='$codigo'", null )
+            if(fila.moveToFirst()){
+                edtCodigo?.setText(fila.getString(0))
+                edtMarca?.setText(fila.getString(1))
+                edtModelo?.setText(fila.getString(2))
+                edtEntrada?.setText(fila.getString(3))
+                edtSalida?.setText(fila.getString(4))
+
+            }
+            else{
+                edtCodigo?.setText("")
+                edtMarca?.setText("")
+                edtModelo?.setText("")
+                edtEntrada?.setText("")
+                edtSalida?.setText("")
+                Toast.makeText(this, "No se ha encontrado ningun registro", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+    fun resetColorRegistros() {
+        for (i in 0 .. tlCelulares!!.childCount){
+            val registro=tlCelulares?.getChildAt(i)
+            registro?.setBackgroundColor(Color.TRANSPARENT)
+
+        }
+    }
+    fun clickBotonBuscar(view: View){
+        llenarTabla()
     }
 }
