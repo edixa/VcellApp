@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         edtSalida=findViewById(R.id.edtSalida)
         edtBuscarPor=findViewById(R.id.edtBuscarPor)
         tlCelulares=findViewById(R.id.tlCelulares)
-
         spBuscarPor=findViewById(R.id.spBuscarPor)
 
         var listaCampos= arrayOf("Selecione el campo a buscar", "codigo", "marca", "modelo", "entrada", "salida")
@@ -68,9 +67,10 @@ class MainActivity : AppCompatActivity() {
         } else{
             Toast.makeText(this,"Los campos deden ser llenados", Toast.LENGTH_LONG).show()
         }
-        baseDatos.close()
+baseDatos.close()
         llenarTabla()
     }
+
     fun eliminar(view: View){
         val con=SqlDB(this,"Tienda",null, 1)
         val baseDatos=con.writableDatabase
@@ -93,6 +93,8 @@ class MainActivity : AppCompatActivity() {
         else{
             Toast.makeText(this,"El campo codigo debe tener texto", Toast.LENGTH_LONG).show()
         }
+        llenarTabla()
+
     }
     fun editar(view: View){
         val con=SqlDB(this,"Tienda", null,1)
@@ -131,19 +133,19 @@ class MainActivity : AppCompatActivity() {
         val listaBuscarPor = spBuscarPor?.selectedItem.toString()
         var sql = ""
         if (!BuscarPor.isEmpty()) {
-            if (listaBuscarPor == "Codigo"){
-                sql = "select codigo, marca, modelo, entrada, salida from inventario where codigo='$BuscarPor'"
+            if (listaBuscarPor == "codigo"){
+                sql = "select codigo,marca,modelo,entrada,salida from inventario where codigo='$BuscarPor'"
 
-        }else if (listaBuscarPor=="Marca"){
+        }else if (listaBuscarPor=="marca"){
             sql="select codigo,marca,modelo,entrada,salida from inventario where marca like'%$BuscarPor%'"
 
-        }else if (listaBuscarPor=="Modelo"){
-                sql="select codigo,marca,modelo,entrada,salida from inventario where modelo like='%$BuscarPor$'"
+        }else if (listaBuscarPor=="modelo"){
+                sql="select codigo,marca,modelo,entrada,salida from inventario where modelo like'%$BuscarPor%'"
 
-        }else if (listaBuscarPor=="Entrada"){
-                sql="select codigo,marca,modelo,entrada,salida from inventario where entrada ='$BuscarPor'"
+        }else if (listaBuscarPor=="entrada"){
+                sql="select codigo,marca,modelo,entrada,salida from inventario where entrada='$BuscarPor'"
 
-        }else if (listaBuscarPor=="Salida"){
+        }else if (listaBuscarPor=="salida"){
                 sql="select codigo, marca,modelo,entrada,salida from inventario where salida ='$BuscarPor'"
 
         }else{
@@ -212,5 +214,11 @@ class MainActivity : AppCompatActivity() {
     }
     fun clickBotonBuscar(view: View){
         llenarTabla()
+    }
+
+    fun refrescar(view: View){
+
+        llenarTabla()
+
     }
 }

@@ -142,8 +142,8 @@
         android:id="@+id/edtBuscarPor"
         android:layout_width="160dp"
         android:layout_height="45dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
         android:ems="10"
         android:hint="Buscar por Codigo"
         android:inputType="text"
@@ -155,10 +155,10 @@
         android:layout_width="59dp"
         android:layout_height="43dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         android:onClick="clickBotonBuscar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.205"
+        app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintStart_toEndOf="@+id/spBuscarPor"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_search_category_default" />
@@ -168,7 +168,7 @@
         android:layout_width="130dp"
         android:layout_height="44dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toEndOf="@+id/edtBuscarPor"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -235,5 +235,19 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="59dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:onClick="refrescar"
+
+        app:layout_constraintEnd_toStartOf="@+id/imageButton4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtSalida"
+        app:srcCompat="@drawable/ic_baseline_refresh_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
