@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
+import androidx.core.view.isEmpty
+import java.sql.Date
+
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     var edtCodigo:EditText?=null
@@ -17,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     var edtBuscarPor:EditText?=null
     var tlCelulares:TableLayout?=null
     var spBuscarPor:Spinner?=null
+    var edtFecha:EditText?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +36,11 @@ class MainActivity : AppCompatActivity() {
         edtBuscarPor=findViewById(R.id.edtBuscarPor)
         tlCelulares=findViewById(R.id.tlCelulares)
         spBuscarPor=findViewById(R.id.spBuscarPor)
+        edtFecha=findViewById(R.id.edtFecha)
 
-        var listaCampos= arrayOf("Selecione el campo a buscar", "codigo", "marca", "modelo", "entrada", "salida")
+
+
+        var listaCampos= arrayOf("Selecione el campo a buscar", "codigo", "marca", "modelo", "entrada", "salida", "fecha")
         var adaptador:ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_spinner_item,listaCampos)
         spBuscarPor?.adapter=adaptador
     }
@@ -49,20 +58,23 @@ class MainActivity : AppCompatActivity() {
         var modelo = edtModelo?.text.toString()
         var entrada = edtEntrada?.text.toString()
         var salida = edtSalida?.text.toString()
+        var fecha = edtFecha?.text.toString()
 
-        if (codigo.isEmpty() == false && marca.isEmpty() == false && modelo.isEmpty() == false && entrada.isEmpty() == false && salida.isEmpty() == false) {
+        if (codigo.isEmpty() == false && marca.isEmpty() == false && modelo.isEmpty() == false && entrada.isEmpty() == false && salida.isEmpty() == false && fecha.isEmpty()==false) {
             var inventario=ContentValues()
             inventario.put("codigo", codigo)
             inventario.put("marca", marca)
             inventario.put("modelo", modelo)
             inventario.put("entrada", entrada)
             inventario.put("salida", salida)
+            inventario.put("fecha", fecha)
             baseDatos.insert("inventario", null, inventario)
             edtCodigo?.setText("")
             edtMarca?.setText("")
             edtModelo?.setText("")
             edtEntrada?.setText("")
             edtSalida?.setText("")
+            edtFecha?.setText("")
             Toast.makeText(this,"Se ha ingresado exitosamente", Toast.LENGTH_LONG).show()
         } else{
             Toast.makeText(this,"Los campos deden ser llenados", Toast.LENGTH_LONG).show()
@@ -89,6 +101,7 @@ baseDatos.close()
             edtModelo?.setText("")
             edtEntrada?.setText("")
             edtSalida?.setText("")
+            edtFecha?.setText("")
         }
         else{
             Toast.makeText(this,"El campo codigo debe tener texto", Toast.LENGTH_LONG).show()
@@ -105,14 +118,16 @@ baseDatos.close()
         val modelo=edtModelo?.text.toString()
         val entrada=edtEntrada?.text.toString()
         val salida=edtSalida?.text.toString()
+        val fecha=edtFecha?.text.toString()
 
-        if(!codigo.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !entrada.isEmpty() && !salida.isEmpty()){
+        if(!codigo.isEmpty() && !marca.isEmpty() && !modelo.isEmpty() && !entrada.isEmpty() && !salida.isEmpty() && !fecha.isEmpty()){
             var inventario=ContentValues()
             inventario.put("codigo", codigo)
             inventario.put("marca", marca)
             inventario.put("modelo", modelo)
             inventario.put("entrada", entrada)
             inventario.put("salida", salida)
+            inventario.put("fecha", fecha)
 
             val cant=baseDatos.update("inventario", inventario, "codigo='$codigo'", null)
 
@@ -134,26 +149,29 @@ baseDatos.close()
         var sql = ""
         if (!BuscarPor.isEmpty()) {
             if (listaBuscarPor == "codigo"){
-                sql = "select codigo,marca,modelo,entrada,salida from inventario where codigo='$BuscarPor'"
+                sql = "select codigo,marca,modelo,entrada,salida,fecha from inventario where codigo='$BuscarPor'"
 
         }else if (listaBuscarPor=="marca"){
-            sql="select codigo,marca,modelo,entrada,salida from inventario where marca like'%$BuscarPor%'"
+            sql="select codigo,marca,modelo,entrada,salida,fecha from inventario where marca like'%$BuscarPor%'"
 
         }else if (listaBuscarPor=="modelo"){
-                sql="select codigo,marca,modelo,entrada,salida from inventario where modelo like'%$BuscarPor%'"
+                sql="select codigo,marca,modelo,entrada,salida,fecha from inventario where modelo like'%$BuscarPor%'"
 
         }else if (listaBuscarPor=="entrada"){
-                sql="select codigo,marca,modelo,entrada,salida from inventario where entrada='$BuscarPor'"
+                sql="select codigo,marca,modelo,entrada,salida,fecha from inventario where entrada='$BuscarPor'"
 
         }else if (listaBuscarPor=="salida"){
-                sql="select codigo, marca,modelo,entrada,salida from inventario where salida ='$BuscarPor'"
+                sql="select codigo,marca,modelo,entrada,salida,fecha from inventario where salida ='$BuscarPor'"
 
-        }else{
-            sql="select codigo,marca,modelo,entrada,salida from inventario"
+        }else if (listaBuscarPor=="fecha"){
+                sql="select codigo,marca,modelo,entrada,salida,fecha from inventario where fecha like'%$BuscarPor%'"
+
+            }else{
+            sql="select codigo,marca,modelo,entrada,salida,fecha from inventario"
         }
     }
         else{
-            sql="select codigo,marca,modelo,entrada,salida from inventario"
+            sql="select codigo,marca,modelo,entrada,salida,fecha from inventario"
 
         }
 
@@ -166,15 +184,20 @@ baseDatos.close()
             val tvModelo=registro.findViewById<View>(R.id.tvModelo) as TextView
             val tvEntrada=registro.findViewById<View>(R.id.tvEntrada) as TextView
             val tvSalida=registro.findViewById<View>(R.id.tvSalida) as TextView
+            val tvFecha=registro.findViewById<View>(R.id.tvFecha) as TextView
 
             tvCodigo.setText(fila.getString(0))
             tvMarca.setText(fila.getString(1))
             tvModelo.setText(fila.getString(2))
             tvEntrada.setText(fila.getString(3))
             tvSalida.setText(fila.getString(4))
+            tvFecha.setText(fila.getString(5))
             tlCelulares?.addView(registro)
 
+
+
         }while (fila.moveToNext())
+
     }
     fun clickRegistro(view: View){
         resetColorRegistros()
@@ -185,13 +208,14 @@ baseDatos.close()
         val con=SqlDB(this, "Tienda", null, 1)
         val baseDatos=con.writableDatabase
         if(!codigo.isEmpty()){
-            val fila=baseDatos.rawQuery("select codigo,marca, modelo, entrada, salida from inventario where codigo='$codigo'", null )
+            val fila=baseDatos.rawQuery("select codigo,marca, modelo, entrada, salida, fecha from inventario where codigo='$codigo'", null )
             if(fila.moveToFirst()){
                 edtCodigo?.setText(fila.getString(0))
                 edtMarca?.setText(fila.getString(1))
                 edtModelo?.setText(fila.getString(2))
                 edtEntrada?.setText(fila.getString(3))
                 edtSalida?.setText(fila.getString(4))
+                edtFecha?.setText(fila.getString(5))
 
             }
             else{
@@ -200,6 +224,7 @@ baseDatos.close()
                 edtModelo?.setText("")
                 edtEntrada?.setText("")
                 edtSalida?.setText("")
+                edtFecha?.setText("")
                 Toast.makeText(this, "No se ha encontrado ningun registro", Toast.LENGTH_SHORT).show()
 
             }
